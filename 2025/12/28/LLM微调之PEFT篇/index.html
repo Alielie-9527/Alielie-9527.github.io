@@ -188,7 +188,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/PEFT/" style="color: #03a9f4">
+                <a href="/tags/PEFT/" style="color: #ffa2c4">
                     PEFT
                 </a>
             </span>
@@ -210,7 +210,7 @@
 </blockquote>
 <hr>
 <h2 id="1-什么是-PEFT？"><a href="#1-什么是-PEFT？" class="headerlink" title="1. 什么是 PEFT？"></a>1. 什么是 PEFT？</h2><p><strong>PEFT (Parameter-Efficient Fine-Tuning)</strong>，即参数高效微调。</p>
-<p>它的核心哲学是：<strong>弱水三千，只取一瓢。</strong> 我们不需要重新训练整个大模型（几百 GB 的显存占用！），而是仅训练其中**极小部分（&lt;1% 的参数）**的参数，同时冻结绝大部分原始权重。</p>
+<p>它的核心哲学是：<strong>弱水三千，只取一瓢</strong>。 我们不需要重新训练整个大模型（几百 GB 的显存占用！），而是仅训练其中**极小部分（&lt;1% 的参数）**的参数，同时冻结绝大部分原始权重。</p>
 <h3 id="1-1-PEFT-家族核心成员"><a href="#1-1-PEFT-家族核心成员" class="headerlink" title="1.1 PEFT 家族核心成员"></a>1.1 PEFT 家族核心成员</h3><ul>
 <li><strong>LoRA (目前最流行)</strong>：通过低秩分解来模拟权重的变化。</li>
 <li><strong>QLoRA</strong>：LoRA 的究极进化版，先压缩模型（4-bit）再训练。</li>
@@ -245,7 +245,7 @@ c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
 M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1828em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.93em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>
 
 <blockquote>
-<p><strong>关键点：</strong> 这种修改发生在 Transformer 的<strong>每一层</strong>，而不仅仅是输入层。</p>
+<p><strong>关键点</strong>： 这种修改发生在 Transformer 的<strong>每一层</strong>，而不仅仅是输入层。</p>
 </blockquote>
 <hr>
 <h2 id="3-提示词微调-Prompt-Tuning-：寻找“软”暗示"><a href="#3-提示词微调-Prompt-Tuning-：寻找“软”暗示" class="headerlink" title="3. 提示词微调 (Prompt Tuning)：寻找“软”暗示"></a>3. 提示词微调 (Prompt Tuning)：寻找“软”暗示</h2><p>相比于 Prefix Tuning，Prompt Tuning 更加简单——它只在<strong>输入层</strong>做文章。</p>
@@ -289,7 +289,7 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
 <li><strong>NLU (自然语言理解)</strong>：比如分类（垃圾邮件识别）、实体识别、情感分析。目标是给出一个<strong>标签（Label）</strong>。</li>
 <li><strong>NLG (自然语言生成)</strong>：比如翻译、摘要、对话。目标是给出一个<strong>长句子</strong>。</li>
 </ol>
-<h4 id="1-Prompt-tuning：把所有任务都看作-NLG"><a href="#1-Prompt-tuning：把所有任务都看作-NLG" class="headerlink" title="1. Prompt-tuning：把所有任务都看作 NLG"></a>1. Prompt-tuning：把所有任务都看作 NLG</h4><p>Prompt-tuning认为：<strong>既然大模型擅长生成，那我们就把分类任务也变成生成任务。</strong></p>
+<h4 id="1-Prompt-tuning：把所有任务都看作-NLG"><a href="#1-Prompt-tuning：把所有任务都看作-NLG" class="headerlink" title="1. Prompt-tuning：把所有任务都看作 NLG"></a>1. Prompt-tuning：把所有任务都看作 NLG</h4><p>Prompt-tuning认为：<strong>既然大模型擅长生成，那我们就把分类任务也变成生成任务</strong>。</p>
 <ul>
 <li><strong>例子（分类任务变生成）</strong>：<ul>
 <li>传统做法：输入“好吃”，模型输出 <code>0</code> 或 <code>1</code>。</li>
@@ -298,7 +298,7 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
 </li>
 <li><strong>归类</strong>：在这种视角下，它被归为 <strong>Generative Task (生成式任务)</strong>。</li>
 </ul>
-<h4 id="2-P-tuning-v1：把所有任务都看作-MLM-填空-（本质也是NLG"><a href="#2-P-tuning-v1：把所有任务都看作-MLM-填空-（本质也是NLG" class="headerlink" title="2. P-tuning v1：把所有任务都看作 MLM (填空)（本质也是NLG)"></a>2. P-tuning v1：把所有任务都看作 MLM (填空)（本质也是NLG)</h4><p>P-tuning 的作者认为：<strong>与其让模型生成，不如让模型做它预训练时最擅长的“填空题”。</strong></p>
+<h4 id="2-P-tuning-v1：把所有任务都看作-MLM-填空-（本质也是NLG"><a href="#2-P-tuning-v1：把所有任务都看作-MLM-填空-（本质也是NLG" class="headerlink" title="2. P-tuning v1：把所有任务都看作 MLM (填空)（本质也是NLG)"></a>2. P-tuning v1：把所有任务都看作 MLM (填空)（本质也是NLG)</h4><p>P-tuning 的作者认为：<strong>与其让模型生成，不如让模型做它预训练时最擅长的“填空题”</strong>。</p>
 <ul>
 <li><strong>例子（分类任务变填空）</strong>：<ul>
 <li>输入：<code>[Virtual Tokens] 这家店真好吃。这是一条 [MASK] 评论。</code></li>
