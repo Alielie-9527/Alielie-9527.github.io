@@ -188,15 +188,15 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83/" style="color: #03a9f4">
-                    大模型微调
+                <a href="/tags/LoRA/" style="color: #00a596">
+                    LoRA
                 </a>
             </span>
             
             <span class="tag">
                 
-                <a href="/tags/LoRA/" style="color: #00bcd4">
-                    LoRA
+                <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83/" style="color: #ff7d73">
+                    大模型微调
                 </a>
             </span>
             
@@ -205,7 +205,8 @@
     </div>
     
     <div class="content" v-pre>
-        <h1 id="大模型微调之-QLoRA（二）"><a href="#大模型微调之-QLoRA（二）" class="headerlink" title="大模型微调之 QLoRA（二）"></a>大模型微调之 QLoRA（二）</h1><h2 id="QLoRA-就是在-LoRA-的基础上引入了量化。大模型训练过程引入了量化，原因还是为了进一步减少显存占用（关于显存占用也会整理相关笔记）。因为模型参数本身需要加载到显存中才能进行计算，比如一个-7B-模型推理就需要-14-16-GB（采用-FP16-或-BF16），即使是-LoRA-微调也需要-20-多个-G-的显存（还要考虑输入数据的-batch-size-等参数）。"><a href="#QLoRA-就是在-LoRA-的基础上引入了量化。大模型训练过程引入了量化，原因还是为了进一步减少显存占用（关于显存占用也会整理相关笔记）。因为模型参数本身需要加载到显存中才能进行计算，比如一个-7B-模型推理就需要-14-16-GB（采用-FP16-或-BF16），即使是-LoRA-微调也需要-20-多个-G-的显存（还要考虑输入数据的-batch-size-等参数）。" class="headerlink" title="QLoRA 就是在 LoRA 的基础上引入了量化。大模型训练过程引入了量化，原因还是为了进一步减少显存占用（关于显存占用也会整理相关笔记）。因为模型参数本身需要加载到显存中才能进行计算，比如一个 7B 模型推理就需要 14~16 GB（采用 FP16 或 BF16），即使是 LoRA 微调也需要 20 多个 G 的显存（还要考虑输入数据的 batch_size 等参数）。"></a>QLoRA 就是在 LoRA 的基础上引入了量化。大模型训练过程引入了量化，<strong>原因还是为了进一步减少显存占用</strong>（关于显存占用也会整理相关笔记）。因为模型参数本身需要加载到显存中才能进行计算，比如一个 7B 模型推理就需要 14~16 GB（采用 FP16 或 BF16），即使是 LoRA 微调也需要 20 多个 G 的显存（还要考虑输入数据的 <code>batch_size</code> 等参数）。</h2><h2 id="QLoRA-的原理"><a href="#QLoRA-的原理" class="headerlink" title="QLoRA 的原理"></a>QLoRA 的原理</h2><p>QLoRA 有以下三个组成部分：</p>
+        <p>QLoRA 就是在 LoRA 的基础上引入了量化。大模型训练过程引入了量化，<strong>原因还是为了进一步减少显存占用</strong>（关于显存占用也会整理相关笔记）。因为模型参数本身需要加载到显存中才能进行计算，比如一个 7B 模型推理就需要 14~16 GB（采用 FP16 或 BF16），即使是 LoRA 微调也需要 20 多个 G 的显存（还要考虑输入数据的 <code>batch_size</code> 等参数）。</p>
+<h2 id="QLoRA-的原理"><a href="#QLoRA-的原理" class="headerlink" title="QLoRA 的原理"></a>QLoRA 的原理</h2><p>QLoRA 有以下三个组成部分：</p>
 <hr>
 <h3 id="一、-4-bit-NormalFloat-量化"><a href="#一、-4-bit-NormalFloat-量化" class="headerlink" title="一、 4-bit NormalFloat 量化"></a>一、 4-bit NormalFloat 量化</h3><p>​	<strong>为什么以前的量化方式不好？</strong> 以 4-bit 量化为例，实际上量化过程就是将参数映射到 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mo>−</mo><mn>7</mn><mo separator="true">,</mo><mn>7</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[-7, 7]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">−</span><span class="mord">7</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">7</span><span class="mclose">]</span></span></span></span> 之间的 15 个数（<strong>刻度</strong>），但是大模型参数的分布往往是不均匀的，而是呈现<strong>近似正态分布</strong>，大部分值都在零附近，而量化过程会导致这些数值之间的差异被抹平。而值域两侧的数值很少用到，浪费了存储空间。</p>
 <p>​	<strong>引入分位数量化，保证每一个量化刻度里包含的数据个数是相等的</strong>。比如量化成 4 和量化成 5 的数的个数是相等的（理论上），这是信息上最优数据类型。这样输入权重理论上均匀分布在所有刻度上，<strong>信息利用率是最高</strong>的。</p>
